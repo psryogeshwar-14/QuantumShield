@@ -1,0 +1,13 @@
+# macOS system files
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Vercel deployment folder
+.vercel
+
+# Environment secrets
+.env
+*.env
+.env.*

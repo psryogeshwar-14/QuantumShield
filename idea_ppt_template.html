@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HackXO — QuantumShield Idea PPT Presentation</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --color-primary: #0066cc;
+      --color-secondary: #7c3aed;
+      --color-accent: #f39c12;
+      --color-success: #2ecc71;
+      --color-background: #050918;
+      --color-card: rgba(255, 255, 255, 0.04);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --font-heading: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--color-background);
+      color: var(--text-primary);
+      font-family: var(--font-heading);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* 16:9 Aspect Ratio Container */
+    .slide-deck {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    @media (min-width: 769px) {
+      .slide-deck {
+        max-width: calc(100vh * 16 / 9);
+        max-height: calc(100vw * 9 / 16);
+        margin: auto;
+        position: absolute;
+        inset: 0;
+      }
+    }
+
+    .slide {
+      position: absolute;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 5rem 6rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateY(20px);
+      background: var(--color-background);
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .slide.active { 
+      opacity: 1; 
+      visibility: visible; 
+      transform: translateY(0);
+    }
+
+    /* Slide Header */
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+      width: 100%;
+    }
+    .hackathon-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border: 1px solid var(--color-accent);
+      padding: 0.25rem 0.75rem;
+      border-radius: 99px;
+    }
+    .team-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Slide Footer */
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border-color);
+      padding-top: 1rem;
+      width: 100%;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    /* Content Layouts */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 100%;
+      padding: 2rem 0;
+    }
+
+    .slide-title {
+      font-size: 2.75rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+      line-height: 1.15;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    /* Cards */
+    .glass-card {
+      background: var(--color-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem 1.75rem;
+      backdrop-filter: blur(12px);
+    }
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.75rem;
+    }
+    .card-text {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* List styling */
+    ul.bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    ul.bullet-list li {
+      position: relative;
+      padding-left: 1.5rem;
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    ul.bullet-list li::before {
+      content: "▪";
+      position: absolute;
+      left: 0;
+      color: var(--color-primary);
+    }
+
+    /* Highlight badges */
+    .highlight-val {
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--color-accent);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Navigation UI */
+    .nav-controls {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      z-index: 1000;
+      background: rgba(10, 14, 39, 0.8);
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      backdrop-filter: blur(8px);
+    }
+    .nav-btn {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-color);
+      color: white;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover { background: rgba(255,255,255,0.15); border-color: var(--color-primary); }
+    .slide-counter { color: var(--text-secondary); font-size: 0.8rem; font-weight: 600; }
+
+    /* Print styling to export cleanly to PDF/PPT */
+    @media print {
+      body { overflow: visible; background: white; color: black; }
+      .slide {
+        position: relative;
+        page-break-after: always;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        height: 100vh;
+        width: 100vw;
+        background: #050918 !important;
+        color: white !important;
+      }
+      .nav-controls { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Slide Deck -->
+  <div class="slide-deck">
+
+    <!-- SLIDE 1: COVER -->
+    <div class="slide active">
+      <div class="slide-header">
+        <span class="hackathon-badge">CXO-INNOFEST 2026</span>
+        <span class="team-badge">Team HackXO</span>
+      </div>
+      <div class="slide-body" style="align-items: center; text-align: center;">
+        <div style="background: rgba(0, 102, 204, 0.1); border: 1px solid var(--color-primary); padding: 0.5rem 1.25rem; border-radius: 99px; font-size: 0.8rem; font-weight: 700; color: var(--color-primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.5rem;">
+          Problem Statement PS 013
+        </div>
+        <h1 class="slide-title" style="font-size: 3.5rem; margin-bottom: 0.5rem;">QuantumShield</h1>
+        <p style="font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin-bottom: 2rem;">
+          Enterprise Quantum-Safe Cryptography Migration Toolkit
+        </p>
+        <div style="font-size: 0.9rem; color: var(--color-accent); font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;">
+          Designed & Developed by Team HackXO
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>PS 013 · Quantum-Safe Cryptography</span>
+        <span>Slide 1 / 8</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: THE PROBLEM -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="hackathon-badge">The Challenge</span>
+        <span class="team-badge">Team HackXO</span>
+      </div>
+      <div class="slide-body">
+        <h2 class="slide-title">The Impending Quantum Threat (Q-Day)</h2>
+        <div class="grid-2">
+          <div>
+            <ul class="bullet-list">
+              <li><strong>Shor's Algorithm Threat:</strong> Capable of breaking legacy asymmetric cryptography (RSA, ECC, Diffie-Hellman) that secures 99% of global communications.</li>
+              <li><strong>Harvest Now, Decrypt Later:</strong> Hostile actors are actively intercepting and storing encrypted enterprise traffic today to decrypt once cryptanalytically relevant quantum computers exist.</li>
+              <li><strong>Visibility Gaps:</strong> Organizations lack automated visibility into where legacy certificates, API keys, and KMS wrappers are deployed.</li>
+            </ul>
+          </div>
+          <div class="grid-3" style="grid-template-columns: 1fr; gap: 1.25rem;">
+            <div class="glass-card" style="border-left: 4px solid var(--color-accent);">
+              <div class="highlight-val">2030</div>
+              <div class="card-text">NIST projected timeframe for complete migration of federal networks to post-quantum standards.</div>
+            </div>
+            <div class="glass-card" style="border-left: 4px solid var(--color-accent);">
+              <div class="highlight-val">100%</div>
+              <div class="card-text">RSA and ECC keys vulnerable to decryption, rendering static data storage completely exposed.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>PS 013 · Quantum-Safe Cryptography</span>
+        <span>Slide 2 / 8</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: THE SOLUTION -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="hackathon-badge">The Solution</span>
+        <span class="team-badge">Team HackXO</span>
+      </div>
+      <div class="slide-body">
+        <h2 class="slide-title">QuantumShield: Migration Toolkit</h2>
+        <div class="grid-3">
+          <div class="glass-card">
+            <div class="card-title">1. Audit & Inventory</div>
+            <p class="card-text">Automated cryptographic asset scanner supporting CSV/JSON payloads. Maps certificate keys, algorithms, strengths, and exposure locations.</p>
+          </div>
+          <div class="glass-card">
+            <div class="card-title">2. Threat & Risk Scoring</div>
+            <p class="card-text">Calculates risk metrics using mathematical formulas based on Shor's and Grover's complexity, data sensitivity, and transition timeframes.</p>
+          </div>
+          <div class="glass-card">
+            <div class="card-title">3. PQC Roadmap</div>
+            <p class="card-text">Generates interactive, NIST FIPS-aligned migration roadmaps (Gantt sliders) mapped to ML-KEM, ML-DSA, and SLH-DSA transition waves.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>PS 013 · Quantum-Safe Cryptography</span>
+        <span>Slide 3 / 8</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: KEY FEATURES -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="hackathon-badge">Product Capabilities</span>
+        <span class="team-badge">Team HackXO</span>
+      </div>
+      <div class="slide-body">
+        <h2 class="slide-title">Key Core Features</h2>
+        <div class="grid-2">
+          <div>
+            <ul class="bullet-list" style="gap: 1.25rem;">
+              <li><strong>Dynamic Asset Scanner:</strong> Secure, file-reader uploader parsing live configuration files to compile exposure metrics.</li>
+              <li><strong>Interactive Compliance Dial:</strong> Visual audit dials assessing readiness against NIST, CNSA, and ISO/IEC regulatory frameworks.</li>
+              <li><strong>Roadmap Timeframe Simulator:</strong> Dynamic Gantt scale that updates compliance forecasts in real-time as users adjust phase resources.</li>
+            </ul>
+          </div>
+          <div class="glass-card" style="padding: 2rem;">
+            <div class="card-title" style="color: var(--color-success); margin-bottom: 1rem;">✔ Certified NIST Mapping</div>
+            <p class="card-text" style="margin-bottom: 1rem;">QuantumShield is aligned with the final FIPS standards released by NIST:</p>
+            <ul class="bullet-list" style="font-size: 0.8rem; gap: 0.5rem;">
+              <li><strong>ML-KEM (Kyber):</strong> Key-encapsulation (FIPS 203)</li>
+              <li><strong>ML-DSA (Dilithium):</strong> Digital signatures (FIPS 204)</li>
+              <li><strong>SLH-DSA (SPHINCS+):</strong> Stateful signature backup (FIPS 205)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>PS 013 · Quantum-Safe Cryptography</span>
+        <span>Slide 4 / 8</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: CRYPTOGRAPHIC IMPLEMENTATION -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="hackathon-badge">Technology Stack</span>
+        <span class="team-badge">Team HackXO</span>
+      </div>
+      <div class="slide-body">
+        <h2 class="slide-title">Hybrid Cryptography Verification</h2>
+        <div class="grid-2">
+          <div>
+            <ul class="bullet-list">
+              <li><strong>Web Crypto API:</strong> Executes real browser-based asymmetric wrapping using RSA-OAEP and symmetric encryption with AES-256-GCM.</li>
+              <li><strong>Simulated Kyber-1024 Wrapper:</strong> Integrates a post-quantum KEM mock wrapper to demonstrate hybrid key agreement.</li>
+              <li><strong>CONFIDENTIALITY SECURED:</strong> Combines classical shared secrets with quantum-safe encapsulations to provide forward secrecy.</li>
+            </ul>
+          </div>
+          <div class="glass-card" style="font-family: var(--font-mono); font-size: 0.75rem; background: rgba(10, 14, 39, 0.9); line-height: 1.4; padding: 1.5rem; border-color: var(--color-primary);">
+            <span style="color: #64748b;">// Hybrid Key Wrapper Scheme</span><br>
+            <span style="color: #a855f7;">async function</span> <span style="color: #06b6d4;">hybridWrap</span>(aesKey) {<br>
+            &nbsp;&nbsp;<span style="color: #2ecc71;">const</span> rsaWrapped = <span style="color: #f1f5f9;">await</span> wrapClassic(aesKey);<br>
+            &nbsp;&nbsp;<span style="color: #2ecc71;">const</span> kyberWrapped = <span style="color: #f1f5f9;">await</span> wrapQuantum(aesKey);<br>
+            &nbsp;&nbsp;<span style="color: #f39c12;">return</span> {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;bundleVersion: <span style="color: #2ecc71;">"QUANTUMSHIELD_HYBRID_V1"</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;classical: buf2hex(rsaWrapped),<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;quantum: buf2hex(kyberWrapped)<br>
+            &nbsp;&nbsp;};<br>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>PS 013 · Quantum-Safe Cryptography</span>
+        <span>Slide 5 / 8</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: ROADMAP & TIMELINE -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="hackathon-badge">Execution Plan</span>
+        <span class="team-badge">Team HackXO</span>
+      </div>
+      <div class="slide-body">
+        <h2 class="slide-title">NIST-Aligned Transition Timeline</h2>
+        <div class="grid-3" style="grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+          <div class="glass-card">
+            <div class="card-title" style="font-size: 0.9rem; color: var(--color-accent);">Phase 1</div>
+            <div style="font-weight: 700; margin-bottom: 0.5rem; font-size: 0.8rem;">Inventory & Risk</div>
+            <p class="card-text" style="font-size: 0.75rem;">Scan databases, servers, and codebases to compile complete crypto inventory and vulnerability metrics.</p>
+          </div>
+          <div class="glass-card">
+            <div class="card-title" style="font-size: 0.9rem; color: var(--color-primary);">Phase 2</div>
+            <div style="font-weight: 700; margin-bottom: 0.5rem; font-size: 0.8rem;">Pilot Migrations</div>
+            <p class="card-text" style="font-size: 0.75rem;">Deploy hybrid wrappers on testing and staging environments to validate latency and overhead.</p>
+          </div>
+          <div class="glass-card">
+            <div class="card-title" style="font-size: 0.9rem; color: var(--color-secondary);">Phase 3</div>
+            <div style="font-weight: 700; margin-bottom: 0.5rem; font-size: 0.8rem;">Full PQC Migration</div>
+            <p class="card-text" style="font-size: 0.75rem;">Deploy ML-KEM for key exchange and ML-DSA / SLH-DSA for certificates and tokens globally.</p>
+          </div>
+          <div class="glass-card">
+            <div class="card-title" style="font-size: 0.9rem; color: var(--color-success);">Phase 4</div>
+            <div style="font-weight: 700; margin-bottom: 0.5rem; font-size: 0.8rem;">Legacy Retirement</div>
+            <p class="card-text" style="font-size: 0.75rem;">Completely deprecate RSA/ECC keys and disable legacy TLS ciphers across internal gateways.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>PS 013 · Quantum-Safe Cryptography</span>
+        <span>Slide 6 / 8</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: BUSINESS IMPACT -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="hackathon-badge">Impact Metrics</span>
+        <span class="team-badge">Team HackXO</span>
+      </div>
+      <div class="slide-body">
+        <h2 class="slide-title">Readiness Optimization Forecast</h2>
+        <div class="grid-2">
+          <div>
+            <ul class="bullet-list">
+              <li><strong>Readiness Elevation:</strong> Transitions the target organization from a critical risk state (34% compliance) to a resilient target state (92% compliance).</li>
+              <li><strong>Regulatory Mitigation:</strong> Blocks potential harvest attacks and guarantees compliance with future CNSA and NIST advisory guidelines.</li>
+              <li><strong>Zero Outages:</strong> Sandbox testing environment prevents migration disruptions by highlighting performance blockers in advance.</li>
+            </ul>
+          </div>
+          <div class="glass-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 260px;">
+            <div style="width: 100%; height: 100%;">
+              <canvas id="slideChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>PS 013 · Quantum-Safe Cryptography</span>
+        <span>Slide 7 / 8</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: SUMMARY -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="hackathon-badge">Summary</span>
+        <span class="team-badge">Team HackXO</span>
+      </div>
+      <div class="slide-body" style="align-items: center; text-align: center;">
+        <h2 class="slide-title" style="font-size: 3rem;">Secure Today. Protected Tomorrow.</h2>
+        <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 650px; margin-bottom: 2rem; line-height: 1.6;">
+          QuantumShield provides CISOs and security architects with the tools they need to map legacy liabilities and migrate cleanly to post-quantum resilience before Q-Day arrives.
+        </p>
+        <div style="background: rgba(46, 204, 113, 0.1); border: 1px solid var(--color-success); padding: 0.75rem 2rem; border-radius: 99px; font-weight: 700; color: var(--color-success); font-size: 1rem;">
+          🔐 Built by HackXO — Ready for Evaluation
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>PS 013 · Quantum-Safe Cryptography</span>
+        <span>Slide 8 / 8</span>
+      </div>
+    </div>
+
+  </div><!-- /.slide-deck -->
+
+  <!-- Navigation -->
+  <div class="nav-controls">
+    <button class="nav-btn" onclick="prevSlide()">←</button>
+    <span class="slide-counter"><span id="current">1</span> / <span id="total">8</span></span>
+    <button class="nav-btn" onclick="nextSlide()">→</button>
+  </div>
+
+  <script>
+    let current = 1;
+    const total = document.querySelectorAll('.slide').length;
+    document.getElementById('total').textContent = total;
+
+    function showSlide(n) {
+      if (n < 1) n = 1;
+      if (n > total) n = total;
+      current = n;
+      document.querySelectorAll('.slide').forEach((s, i) => {
+        s.classList.toggle('active', i === n - 1);
+      });
+      document.getElementById('current').textContent = n;
+      
+      // Render chart only when slide 7 is active
+      if (n === 7) {
+        initSlideChart();
+      }
+    }
+
+    function nextSlide() { showSlide(current + 1); }
+    function prevSlide() { showSlide(current - 1); }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+
+    // Chart.js render logic
+    let chartInstance = null;
+    function initSlideChart() {
+      const ctx = document.getElementById('slideChart');
+      if (!ctx) return;
+      if (chartInstance) chartInstance.destroy();
+      
+      chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Legacy RSA', 'NIST ML-KEM', 'NIST ML-DSA', 'Compliance Score'],
+          datasets: [
+            {
+              label: 'Pre-Migration (%)',
+              data: [95, 0, 0, 34],
+              backgroundColor: 'rgba(243, 156, 18, 0.4)',
+              borderColor: '#f39c12',
+              borderWidth: 1.5
+            },
+            {
+              label: 'Post-Migration (%)',
+              data: [0, 100, 100, 92],
+              backgroundColor: 'rgba(46, 204, 113, 0.4)',
+              borderColor: '#2ecc71',
+              borderWidth: 1.5
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: { color: '#94a3b8', font: { family: 'Inter', size: 11 } }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255,255,255,0.05)' },
+              ticks: { color: '#94a3b8', font: { family: 'Inter', size: 10 } }
+            },
+            y: {
+              grid: { color: 'rgba(255,255,255,0.05)' },
+              ticks: { color: '#94a3b8', font: { family: 'Inter', size: 10 } },
+              max: 100
+            }
+          }
+        }
+      });
+    }
+
+    showSlide(1);
+  </script>
+</body>
+</html>

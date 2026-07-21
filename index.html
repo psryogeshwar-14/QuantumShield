@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuantumShield — Quantum-Safe Cryptography Migration Toolkit | CXO-INNOFEST 2026</title>
+  <meta name="description" content="Audit your cryptographic inventory, assess quantum threats, and generate a NIST PQC-aligned migration roadmap with QuantumShield." />
+  
+  <!-- Preconnect Resource Hints for fast load -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
+
+  <!-- Open Graph / Facebook Metadata -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://cywayz.cxo/innofest/ps013/" />
+  <meta property="og:title" content="QuantumShield — Quantum-Safe Cryptography Migration Toolkit" />
+  <meta property="og:description" content="Audit cryptographic inventories, assess Shor's and Grover's algorithm exposure, and generate NIST PQC roadmaps." />
+  <meta property="og:image" content="https://cywayz.cxo/innofest/ps013/assets/og-preview.png" />
+
+  <!-- Twitter Card Metadata -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://cywayz.cxo/innofest/ps013/" />
+  <meta name="twitter:title" content="QuantumShield — Quantum-Safe Cryptography Migration Toolkit" />
+  <meta name="twitter:description" content="Audit cryptographic inventories, assess Shor's and Grover's algorithm exposure, and generate NIST PQC roadmaps." />
+  <meta name="twitter:image" content="https://cywayz.cxo/innofest/ps013/assets/og-preview.png" />
+
+  <!-- Google Web Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  
+  <!-- Deferred CDN & App Scripts (Optimized Fast Load) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+  <script src="js/app.js" defer></script>
+  <script src="js/crypto-demo.js" defer></script>
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Loading Overlay -->
+  <div id="loading-overlay">
+    <div class="loader-content">
+      <div class="loader-spinner"></div>
+      <span class="loader-text">Initializing QuantumShield...</span>
+    </div>
+  </div>
+
+  <!-- Cursor Glow (Emil Kowalski style) -->
+  <div id="cursor-glow"></div>
+
+  <!-- Confetti Canvas for Decrypt Celebration -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Particle background -->
+  <canvas id="particles-canvas"></canvas>
+
+  <div id="app">
+    <!-- Mobile Menu Toggle -->
+    <button id="mobile-menu-btn" class="mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div id="sidebar-backdrop" class="sidebar-backdrop" onclick="toggleMobileSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">
+          <!-- Cywayz CXO Brand Logo SVG -->
+          <svg width="44" height="28" viewBox="0 0 60 30" fill="none" style="overflow: visible;">
+            <!-- C (Blue Arc) -->
+            <path d="M14 7 A 6 6 0 1 0 14 21" stroke="#0066cc" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+            <!-- X (Orange/Yellow diagonal & arrow) -->
+            <path d="M21 21 L29 11 M21 11 L29 21" stroke="#f39c12" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M25 8 L32 8 L32 15" stroke="#f39c12" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M29 11 L32 8" stroke="#f39c12" stroke-width="4.5" stroke-linecap="round"/>
+            <!-- O (Green Circle) -->
+            <circle cx="43" cy="14" r="5" stroke="#2ecc71" stroke-width="4.5" fill="none"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name" style="font-size: 1.15rem; font-weight: 800; color: #fff; letter-spacing: -0.02em;">cywayz</span>
+          <span class="logo-tag" style="font-size: 0.6rem; letter-spacing: 0.05em; color: var(--text-muted);">PS 013 · CIF 2026</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-item active" data-section="dashboard" onclick="navigate('dashboard')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </a>
+        <a class="nav-item" data-section="scanner" onclick="navigate('scanner')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          Crypto Inventory
+        </a>
+        <a class="nav-item" data-section="risk" onclick="navigate('risk')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Risk Assessment
+        </a>
+        <a class="nav-item" data-section="compliance" onclick="navigate('compliance')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          Compliance Audit
+        </a>
+        <a class="nav-item" data-section="roadmap" onclick="navigate('roadmap')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><polyline points="8 6 3 12 8 18"/><polyline points="16 6 21 12 16 18"/></svg>
+          Migration Roadmap
+        </a>
+        <a class="nav-item" data-section="crypto" onclick="navigate('crypto')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Hybrid Crypto Demo
+        </a>
+        <a class="nav-item" data-section="skills" onclick="navigate('skills')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          Specialist Skills
+        </a>
+        <a class="nav-item" data-section="report" onclick="navigate('report')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Report
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="org-badge">
+          <div class="org-dot"></div>
+          <span>Acme Corp · Active Scan</span>
+        </div>
+        <div class="powered-by">
+          <span>Presented at</span>
+          <strong>CXO-INNOFEST 2026</strong>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main id="main-content">
+
+      <!-- ===== DASHBOARD ===== -->
+      <section id="section-dashboard" class="page-section active">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Quantum Risk Dashboard</h1>
+            <p class="page-subtitle">Organization: <span class="highlight">Acme Corp</span> · Last scan: <span id="scan-time">Not yet scanned</span></p>
+          </div>
+          <button class="btn-primary" onclick="navigate('scanner'); startScan()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Run New Scan
+          </button>
+        </div>
+
+        <!-- Risk Score Row -->
+        <div class="dashboard-hero">
+          <div class="glass-card risk-gauge-card">
+            <h3 class="card-title">Overall Quantum Risk Score</h3>
+            <div class="gauge-container">
+              <canvas id="risk-gauge-chart" width="240" height="240"></canvas>
+              <div class="gauge-center">
+                <span class="gauge-value" id="gauge-score">78</span>
+                <span class="gauge-label" id="gauge-risk-label">CRITICAL</span>
+              </div>
+            </div>
+            <p class="gauge-note" id="gauge-status-note">Your org is <strong>highly exposed</strong> to quantum threats. Immediate action required on RSA and ECC assets.</p>
+          </div>
+
+          <div class="dashboard-stats">
+            <div class="glass-card stat-card critical">
+              <div class="stat-icon-wrap critical-bg">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+              </div>
+              <div>
+                <span class="stat-num" id="stat-critical">0</span>
+                <span class="stat-label">Critical Assets</span>
+              </div>
+            </div>
+            <div class="glass-card stat-card high">
+              <div class="stat-icon-wrap high-bg">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              <div>
+                <span class="stat-num" id="stat-high">0</span>
+                <span class="stat-label">High Risk Assets</span>
+              </div>
+            </div>
+            <div class="glass-card stat-card medium">
+              <div class="stat-icon-wrap medium-bg">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <div>
+                <span class="stat-num" id="stat-medium">0</span>
+                <span class="stat-label">Medium Risk</span>
+              </div>
+            </div>
+            <div class="glass-card stat-card safe">
+              <div class="stat-icon-wrap safe-bg">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div>
+                <span class="stat-num" id="stat-safe">0</span>
+                <span class="stat-label">Quantum-Safe</span>
+              </div>
+            </div>
+
+            <!-- Q-Day Countdown -->
+            <div class="glass-card qday-card">
+              <h3 class="card-title">⏱ Estimated Q-Day Timeline</h3>
+              <div class="qday-bar-wrap">
+                <div class="qday-labels">
+                  <span>Today (2026)</span>
+                  <span>Q-Day (~2030)</span>
+                  <span>2035</span>
+                </div>
+                <div class="qday-bar">
+                  <div class="qday-fill"></div>
+                  <div class="qday-marker" title="We are here"></div>
+                </div>
+              </div>
+              <p class="qday-note">Cryptographically-Relevant Quantum Computer (CRQC) expected by <strong>2029–2031</strong>. "Harvest Now, Decrypt Later" attacks are already happening.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Algorithm exposure chart -->
+        <div class="dashboard-bottom">
+          <div class="glass-card chart-card">
+            <h3 class="card-title">Algorithm Exposure Breakdown</h3>
+            <canvas id="algo-breakdown-chart" height="100"></canvas>
+          </div>
+          <div class="glass-card chart-card">
+            <h3 class="card-title">Asset Category Risk</h3>
+            <canvas id="category-risk-chart" height="100"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SCANNER ===== -->
+      <section id="section-scanner" class="page-section">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Cryptographic Inventory Scanner</h1>
+            <p class="page-subtitle">Discover all cryptographic assets across your infrastructure</p>
+          </div>
+          <div class="scanner-actions">
+            <button class="btn-outline" onclick="triggerFileInput()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+              Upload Assets (CSV/JSON)
+            </button>
+            <input type="file" id="asset-file-input" style="display: none;" accept=".csv,.json" onchange="handleFileUpload(event)" />
+            <button class="btn-primary" id="scan-btn" onclick="startScan()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Start Scan
+            </button>
+          </div>
+        </div>
+
+        <!-- Drag & Drop Upload Zone -->
+        <div id="drop-zone" class="glass-card drop-zone-card" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+          <div class="drop-zone-content">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5h10.5a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0017.25 4.5H6.75A2.25 2.25 0 004.5 6.75v10.5a2.25 2.25 0 002.25 2.25z"/></svg>
+            <p>Drag & drop asset manifest file (<strong>CSV</strong> or <strong>JSON</strong>) here, or <span class="highlight-link" onclick="triggerFileInput()">browse files</span></p>
+            <span class="file-format-info">Expected columns: asset, category, algo, keySize, sensitivity</span>
+          </div>
+        </div>
+
+        <!-- Scan progress -->
+        <div id="scan-progress-area" class="glass-card scan-progress-card" style="display:none">
+          <div class="scan-header">
+            <div class="scan-pulse"></div>
+            <span id="scan-status-text">Initializing scanner...</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="scan-progress-bar"></div>
+          </div>
+          <div class="scan-log" id="scan-log"></div>
+        </div>
+
+        <!-- Scan targets -->
+        <div class="scan-targets" id="scan-targets">
+          <div class="glass-card target-card" id="target-tls">
+            <div class="target-header">
+              <div class="target-icon tls-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              </div>
+              <div>
+                <h3>TLS Certificates</h3>
+                <p>Scanning endpoints for certificate algorithms</p>
+              </div>
+              <div class="target-status" id="status-tls">Pending</div>
+            </div>
+            <div class="target-result" id="result-tls"></div>
+          </div>
+
+          <div class="glass-card target-card" id="target-api">
+            <div class="target-header">
+              <div class="target-icon api-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+              </div>
+              <div>
+                <h3>API Authentication</h3>
+                <p>Analyzing JWT, OAuth, and API key algorithms</p>
+              </div>
+              <div class="target-status" id="status-api">Pending</div>
+            </div>
+            <div class="target-result" id="result-api"></div>
+          </div>
+
+          <div class="glass-card target-card" id="target-db">
+            <div class="target-header">
+              <div class="target-icon db-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+              </div>
+              <div>
+                <h3>Database Encryption</h3>
+                <p>Checking encryption-at-rest and key exchange</p>
+              </div>
+              <div class="target-status" id="status-db">Pending</div>
+            </div>
+            <div class="target-result" id="result-db"></div>
+          </div>
+
+          <div class="glass-card target-card" id="target-code">
+            <div class="target-header">
+              <div class="target-icon code-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              </div>
+              <div>
+                <h3>Code Signing & PKI</h3>
+                <p>Auditing signatures and certificate authorities</p>
+              </div>
+              <div class="target-status" id="status-code">Pending</div>
+            </div>
+            <div class="target-result" id="result-code"></div>
+          </div>
+        </div>
+
+        <!-- Results table -->
+        <div id="scan-results-table" style="display:none">
+          <div class="glass-card">
+            <div class="table-header-row">
+              <h3 class="card-title">📋 Full Inventory Report</h3>
+              <button class="btn-outline" onclick="navigate('report')">View Full Report →</button>
+            </div>
+            <div class="table-wrap">
+              <table id="inventory-table">
+                <thead>
+                  <tr>
+                    <th>Asset / Endpoint</th>
+                    <th>Category</th>
+                    <th>Algorithm</th>
+                    <th>Key Size</th>
+                    <th>Quantum Threat</th>
+                    <th>Attack Vector</th>
+                    <th>Risk Level</th>
+                  </tr>
+                </thead>
+                <tbody id="inventory-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== RISK ASSESSMENT ===== -->
+      <section id="section-risk" class="page-section">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Quantum Risk Assessment</h1>
+            <p class="page-subtitle">Risk scoring based on data sensitivity, algorithm vulnerability, and quantum timeline</p>
+          </div>
+        </div>
+
+        <div class="risk-intro-cards">
+          <div class="glass-card threat-info-card">
+            <div class="threat-badge shor">Shor's Algorithm</div>
+            <h3>Breaks Asymmetric Crypto</h3>
+            <p>Quantum computers running Shor's algorithm can break RSA, ECC, and Diffie-Hellman in polynomial time — rendering all public-key infrastructure obsolete.</p>
+            <div class="threat-affects">Affects: RSA · ECC · DH · DSA · ECDSA</div>
+          </div>
+          <div class="glass-card threat-info-card">
+            <div class="threat-badge grover">Grover's Algorithm</div>
+            <h3>Weakens Symmetric Crypto</h3>
+            <p>Grover's algorithm provides a quadratic speedup for brute-force attacks, effectively halving the security of symmetric keys and hash functions.</p>
+            <div class="threat-affects">Affects: AES-128 → 64-bit · SHA-256 → 128-bit</div>
+          </div>
+          <div class="glass-card threat-info-card">
+            <div class="threat-badge harvest">Harvest Now, Decrypt Later</div>
+            <h3>Data Already at Risk</h3>
+            <p>Adversaries are harvesting encrypted data <em>today</em> to decrypt once quantum computers exist. Long-lived sensitive data is already compromised.</p>
+            <div class="threat-affects">Timeline: 2026–2030 · Immediate action needed</div>
+          </div>
+        </div>
+
+        <!-- Heatmap -->
+        <div class="glass-card">
+          <h3 class="card-title">Risk Heatmap — Asset × Sensitivity</h3>
+          <div class="heatmap-container" id="risk-heatmap"></div>
+        </div>
+
+        <!-- Risk detail table -->
+        <div class="glass-card" style="margin-top:1.5rem">
+          <h3 class="card-title">Detailed Risk Scoring</h3>
+          <div class="table-wrap">
+            <table id="risk-table">
+              <thead>
+                <tr>
+                  <th>Asset</th>
+                  <th>Algorithm</th>
+                  <th>Data Sensitivity</th>
+                  <th>Vulnerability Score</th>
+                  <th>Time-to-Migrate</th>
+                  <th>Priority</th>
+                </tr>
+              </thead>
+              <tbody id="risk-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== COMPLIANCE AUDIT ===== -->
+      <section id="section-compliance" class="page-section">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Compliance & Regulatory Audit</h1>
+            <p class="page-subtitle">Evaluate quantum readiness against federal and industrial security frameworks</p>
+          </div>
+        </div>
+
+        <div class="compliance-metrics-grid">
+          <div class="glass-card compliance-framework-card" id="framework-fedramp">
+            <div class="framework-header">
+              <span class="framework-name">FedRAMP / FIPS</span>
+              <span class="compliance-status status-fail">Non-Compliant</span>
+            </div>
+            <div class="compliance-score-ring-wrap">
+              <svg width="100" height="100" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.06)" stroke-width="8" fill="transparent"/>
+                <circle id="ring-fedramp" cx="50" cy="50" r="40" stroke="var(--red)" stroke-dasharray="251.2" stroke-dashoffset="175.84" stroke-width="8" fill="transparent" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-label">30%</div>
+            </div>
+            <p class="framework-desc">FIPS 140-3 &amp; NIST SP 800-53 state that agencies must prepare PQC transitions. Legacy RSA/ECC must show a migration schedule.</p>
+          </div>
+
+          <div class="glass-card compliance-framework-card" id="framework-pci">
+            <div class="framework-header">
+              <span class="framework-name">PCI-DSS v4.0</span>
+              <span class="compliance-status status-fail">At Risk</span>
+            </div>
+            <div class="compliance-score-ring-wrap">
+              <svg width="100" height="100" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.06)" stroke-width="8" fill="transparent"/>
+                <circle id="ring-pci" cx="50" cy="50" r="40" stroke="var(--orange)" stroke-dasharray="251.2" stroke-dashoffset="100.48" stroke-width="8" fill="transparent" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-label">60%</div>
+            </div>
+            <p class="framework-desc">Protects cardholder key exchanges. Quantum vulnerability means card data is subject to harvest-now-decrypt-later vectors.</p>
+          </div>
+
+          <div class="glass-card compliance-framework-card" id="framework-hipaa">
+            <div class="framework-header">
+              <span class="framework-name">HIPAA</span>
+              <span class="compliance-status status-fail">At Risk</span>
+            </div>
+            <div class="compliance-score-ring-wrap">
+              <svg width="100" height="100" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.06)" stroke-width="8" fill="transparent"/>
+                <circle id="ring-hipaa" cx="50" cy="50" r="40" stroke="var(--orange)" stroke-dasharray="251.2" stroke-dashoffset="125.6" stroke-width="8" fill="transparent" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-label">50%</div>
+            </div>
+            <p class="framework-desc">Patient health records must maintain confidentiality for up to 50 years. Active RSA-2048 keys represent a critical long-term HIPAA exposure.</p>
+          </div>
+
+          <div class="glass-card compliance-framework-card" id="framework-gdpr">
+            <div class="framework-header">
+              <span class="framework-name">GDPR (Article 32)</span>
+              <span class="compliance-status status-fail">At Risk</span>
+            </div>
+            <div class="compliance-score-ring-wrap">
+              <svg width="100" height="100" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.06)" stroke-width="8" fill="transparent"/>
+                <circle id="ring-gdpr" cx="50" cy="50" r="40" stroke="var(--orange)" stroke-dasharray="251.2" stroke-dashoffset="113.04" stroke-width="8" fill="transparent" stroke-linecap="round"/>
+              </svg>
+              <div class="ring-label">55%</div>
+            </div>
+            <p class="framework-desc">Demands state-of-the-art encryption. Over-reliance on deprecated RSA/ECC exposes organizations to potential failure of secure data processor audits.</p>
+          </div>
+        </div>
+
+        <div class="glass-card compliance-detailed-findings" style="margin-top:1.5rem">
+          <h3 class="card-title">Compliance Audit Logs</h3>
+          <div class="audit-log-box" id="compliance-logs">
+            <!-- Dynamic audit lines will render here -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== ROADMAP ===== -->
+      <section id="section-roadmap" class="page-section">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">NIST PQC Migration Roadmap</h1>
+            <p class="page-subtitle">Prioritized migration plan aligned with NIST FIPS 203, 204, 205, 206 standards</p>
+          </div>
+        </div>
+
+        <!-- Gantt Config Sliders -->
+        <div class="glass-card gantt-config-card">
+          <h3 class="card-title">⚙️ Interactive Roadmap Controls</h3>
+          <div class="sliders-grid">
+            <div class="slider-control">
+              <label>Phase 1: Audit Duration (Quarters)</label>
+              <div class="slider-row">
+                <input type="range" id="slider-p1" min="1" max="4" value="2" oninput="updateRoadmapConfig()" />
+                <span id="label-p1">2 Qtrs</span>
+              </div>
+            </div>
+            <div class="slider-control">
+              <label>Phase 2: Pilot Duration (Quarters)</label>
+              <div class="slider-row">
+                <input type="range" id="slider-p2" min="1" max="4" value="2" oninput="updateRoadmapConfig()" />
+                <span id="label-p2">2 Qtrs</span>
+              </div>
+            </div>
+            <div class="slider-control">
+              <label>Phase 3: Migration Duration (Quarters)</label>
+              <div class="slider-row">
+                <input type="range" id="slider-p3" min="1" max="6" value="3" oninput="updateRoadmapConfig()" />
+                <span id="label-p3">3 Qtrs</span>
+              </div>
+            </div>
+            <div class="slider-control">
+              <label>Phase 4: Legacy Retirement (Quarters)</label>
+              <div class="slider-row">
+                <input type="range" id="slider-p4" min="1" max="4" value="1" oninput="updateRoadmapConfig()" />
+                <span id="label-p4">1 Qtr</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NIST Standards Info -->
+        <div class="nist-standards">
+          <div class="glass-card nist-card">
+            <div class="nist-badge">FIPS 203</div>
+            <div class="nist-info">
+              <strong>ML-KEM (CRYSTALS-Kyber)</strong>
+              <span>Key Encapsulation Mechanism</span>
+            </div>
+            <div class="nist-replace">Replaces RSA &amp; ECDH key exchange</div>
+          </div>
+          <div class="glass-card nist-card">
+            <div class="nist-badge">FIPS 204</div>
+            <div class="nist-info">
+              <strong>ML-DSA (CRYSTALS-Dilithium)</strong>
+              <span>Lattice-Based Digital Signatures</span>
+            </div>
+            <div class="nist-replace">Replaces RSA &amp; ECDSA signatures</div>
+          </div>
+          <div class="glass-card nist-card">
+            <div class="nist-badge">FIPS 205</div>
+            <div class="nist-info">
+              <strong>SLH-DSA (SPHINCS+)</strong>
+              <span>Hash-Based Signatures</span>
+            </div>
+            <div class="nist-replace">Stateless hash-based backup signer</div>
+          </div>
+          <div class="glass-card nist-card">
+            <div class="nist-badge">FIPS 206</div>
+            <div class="nist-info">
+              <strong>FN-DSA (FALCON)</strong>
+              <span>Compact Lattice Signatures</span>
+            </div>
+            <div class="nist-replace">Low-bandwidth signature replacement</div>
+          </div>
+        </div>
+
+        <!-- Gantt-style timeline -->
+        <div class="glass-card">
+          <h3 class="card-title">Migration Timeline (2026–2030)</h3>
+          <div class="gantt-container" id="gantt-chart"></div>
+        </div>
+
+        <!-- Phase details -->
+        <div class="phases-grid" id="phases-grid"></div>
+      </section>
+
+      <!-- ===== HYBRID CRYPTO DEMO ===== -->
+      <section id="section-crypto" class="page-section">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Hybrid Encryption Wrapper Demo</h1>
+            <p class="page-subtitle">Classical + Quantum-Safe algorithms working together for a seamless transition</p>
+          </div>
+        </div>
+
+        <div class="crypto-explainer glass-card">
+          <h3 class="card-title">🔐 What is Hybrid Encryption?</h3>
+          <p>During migration, we cannot switch overnight. Hybrid encryption uses <strong>both</strong> classical and quantum-safe algorithms simultaneously — ensuring forward security even if one is compromised. The shared secret is the combination of both key exchanges.</p>
+          <div class="hybrid-formula">
+            <span class="formula-part classical">RSA-OAEP / ECDH</span>
+            <span class="formula-op">⊕</span>
+            <span class="formula-part quantum">ML-KEM / Kyber</span>
+            <span class="formula-op">=</span>
+            <span class="formula-part hybrid">Hybrid Shared Secret</span>
+          </div>
+        </div>
+
+        <div class="crypto-demo-grid">
+          <!-- Input -->
+          <div class="glass-card crypto-input-card">
+            <h3 class="card-title">Input Payload</h3>
+            <textarea id="plaintext-input" class="crypto-textarea" placeholder="Enter sensitive data to encrypt...">"QuantumShield Demo: Patient record #42, SSN: 123-45-6789, Balance: $500,000. This data must be protected against future quantum computers."</textarea>
+            <div class="crypto-options">
+              <div class="option-group">
+                <label>Classical Algorithm</label>
+                <select id="classical-algo">
+                  <option value="RSA-OAEP">RSA-OAEP (2048-bit)</option>
+                  <option value="ECDH">ECDH (P-256)</option>
+                </select>
+              </div>
+              <div class="option-group">
+                <label>Quantum-Safe Algorithm</label>
+                <select id="quantum-algo">
+                  <option value="Kyber-1024">ML-KEM / Kyber-1024</option>
+                  <option value="Kyber-768">ML-KEM / Kyber-768</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn-primary full-width" id="encrypt-btn" onclick="runHybridEncrypt()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              Encrypt with Hybrid Wrapper
+            </button>
+          </div>
+
+          <!-- Flow visualization -->
+          <div class="glass-card crypto-flow-card">
+            <h3 class="card-title">Encryption Flow</h3>
+            <div class="crypto-flow" id="crypto-flow">
+              <div class="flow-step" id="flow-step-1">
+                <div class="flow-icon">📝</div>
+                <div class="flow-label">Plaintext</div>
+                <div class="flow-detail">Input payload</div>
+              </div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" id="flow-step-2">
+                <div class="flow-icon">🔑</div>
+                <div class="flow-label">AES-256-GCM</div>
+                <div class="flow-detail">Symmetric key encryption</div>
+              </div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" id="flow-step-3">
+                <div class="flow-icon">🔐</div>
+                <div class="flow-label">Classical Wrap</div>
+                <div class="flow-detail" id="flow-classical-label">RSA-OAEP wraps AES key</div>
+              </div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" id="flow-step-4">
+                <div class="flow-icon">⚛️</div>
+                <div class="flow-label">Quantum-Safe Wrap</div>
+                <div class="flow-detail" id="flow-quantum-label">Kyber-1024 wraps AES key</div>
+              </div>
+              <div class="flow-arrow">↓</div>
+              <div class="flow-step" id="flow-step-5">
+                <div class="flow-icon">📦</div>
+                <div class="flow-label">Hybrid Ciphertext</div>
+                <div class="flow-detail">Combined secure output</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Output -->
+          <div class="glass-card crypto-output-card">
+            <h3 class="card-title">Encrypted Output</h3>
+            <div id="crypto-output-area">
+              <div class="crypto-output-placeholder">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                <p>Click "Encrypt" to see the hybrid-encrypted output</p>
+              </div>
+            </div>
+            <div id="crypto-metrics" style="display:none">
+              <div class="metric-row">
+                <span>Classical key (RSA):</span>
+                <span id="metric-classical" class="metric-val"></span>
+              </div>
+              <div class="metric-row">
+                <span>Quantum-safe key (Kyber sim):</span>
+                <span id="metric-quantum" class="metric-val"></span>
+              </div>
+              <div class="metric-row">
+                <span>AES-256-GCM key:</span>
+                <span id="metric-aes" class="metric-val"></span>
+              </div>
+              <div class="metric-row">
+                <span>Ciphertext size:</span>
+                <span id="metric-size" class="metric-val"></span>
+              </div>
+              <div class="metric-row">
+                <span>Encryption time:</span>
+                <span id="metric-time" class="metric-val"></span>
+              </div>
+            </div>
+            <div class="cipher-output" id="cipher-text-display" style="display:none"></div>
+            <button class="btn-outline full-width" id="decrypt-btn" onclick="runHybridDecrypt()" style="display:none;margin-top:1rem">
+              🔓 Decrypt &amp; Verify
+            </button>
+            <div id="decrypt-result" style="display:none" class="decrypt-success">
+              <div class="decrypt-icon">✅</div>
+              <div>
+                <strong>Successfully Decrypted!</strong>
+                <p id="decrypted-text-display"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparison table -->
+        <div class="glass-card" style="margin-top:1.5rem">
+          <h3 class="card-title">Algorithm Security Comparison</h3>
+          <div class="table-wrap">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Algorithm</th>
+                  <th>Type</th>
+                  <th>Classical Security</th>
+                  <th>Quantum Security</th>
+                  <th>Key Size</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="danger-row">
+                  <td><strong>RSA-2048</strong></td>
+                  <td>Asymmetric (Classical)</td>
+                  <td><span class="sec-badge safe">112-bit</span></td>
+                  <td><span class="sec-badge broken">0-bit ❌</span></td>
+                  <td>2048 bits</td>
+                  <td><span class="status-badge critical">DEPRECATED</span></td>
+                </tr>
+                <tr class="danger-row">
+                  <td><strong>ECC P-256</strong></td>
+                  <td>Asymmetric (Classical)</td>
+                  <td><span class="sec-badge safe">128-bit</span></td>
+                  <td><span class="sec-badge broken">0-bit ❌</span></td>
+                  <td>256 bits</td>
+                  <td><span class="status-badge critical">DEPRECATED</span></td>
+                </tr>
+                <tr>
+                  <td><strong>AES-256</strong></td>
+                  <td>Symmetric</td>
+                  <td><span class="sec-badge safe">256-bit</span></td>
+                  <td><span class="sec-badge medium">128-bit ✓</span></td>
+                  <td>256 bits</td>
+                  <td><span class="status-badge safe">SAFE</span></td>
+                </tr>
+                <tr class="quantum-row">
+                  <td><strong>ML-KEM / Kyber-1024</strong></td>
+                  <td>Lattice-based KEM</td>
+                  <td><span class="sec-badge safe">256-bit</span></td>
+                  <td><span class="sec-badge safe">256-bit ✓</span></td>
+                  <td>1568 bytes</td>
+                  <td><span class="status-badge quantum">NIST FIPS 203</span></td>
+                </tr>
+                <tr class="quantum-row">
+                  <td><strong>ML-DSA / Dilithium3</strong></td>
+                  <td>Lattice-based DSA</td>
+                  <td><span class="sec-badge safe">256-bit</span></td>
+                  <td><span class="sec-badge safe">256-bit ✓</span></td>
+                  <td>1952 bytes</td>
+                  <td><span class="status-badge quantum">NIST FIPS 204</span></td>
+                </tr>
+                <tr class="quantum-row">
+                  <td><strong>SLH-DSA / SPHINCS+</strong></td>
+                  <td>Hash-based Sig</td>
+                  <td><span class="sec-badge safe">256-bit</span></td>
+                  <td><span class="sec-badge safe">256-bit ✓</span></td>
+                  <td>49856 bytes</td>
+                  <td><span class="status-badge quantum">NIST FIPS 205</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== SPECIALIST SKILLS ===== -->
+      <section id="section-skills" class="page-section">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Specialist Skills</h1>
+            <p class="page-subtitle">Demonstrated UI engineering, micro-animation, and verification capabilities</p>
+          </div>
+        </div>
+
+        <div class="skills-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+          <!-- Card 1: Emil Kowalski Skill -->
+          <div class="glass-card skill-card reveal" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div class="skill-icon-wrap" style="width: 48px; height: 48px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; background: rgba(0, 102, 204, 0.15); color: var(--cyan); margin-bottom: 1.25rem;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-18h-9z"/></svg>
+              </div>
+              <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">Emil Kowalski Skill</h2>
+              <p style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Interaction & Micro-animations</p>
+              <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.5rem;">
+                Specialized in creating high-fidelity, spring-based micro-interactions, staggered list reveals, dynamic cursors, and buttery smooth transitions that enhance visual delight and user engagement.
+              </p>
+            </div>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-primary);">
+              <li style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--cyan);">✔</span> 3D Card Perspective Tilt</li>
+              <li style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--cyan);">✔</span> Physics-Based Spring Counters</li>
+              <li style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--cyan);">✔</span> Lerping Cursor Follower Glow</li>
+              <li style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--cyan);">✔</span> Staggered Row Animation-Delays</li>
+            </ul>
+          </div>
+
+          <!-- Card 2: Impeccable Skill -->
+          <div class="glass-card skill-card reveal" style="display: flex; flex-direction: column; justify-content: space-between; border-color: var(--purple-glow); box-shadow: 0 0 20px var(--purple-glow);">
+            <div>
+              <div style="position: absolute; top: 1.25rem; right: 1.25rem; background: var(--purple); color: white; font-size: 0.6rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: var(--radius-xs); letter-spacing: 0.05em; text-transform: uppercase;">
+                ★ FAV: SLASH POLISH
+              </div>
+              <div class="skill-icon-wrap" style="width: 48px; height: 48px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; background: rgba(124, 58, 237, 0.15); color: var(--purple-light); margin-bottom: 1.25rem;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">Impeccable Skill</h2>
+              <p style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Pixel-Perfect Detailing & Polish</p>
+              <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.5rem;">
+                Committed to absolute design precision. Implementing premium glassmorphism, animated rotating conic gradient borders, customized scrollbars, and responsive page enter animations.
+              </p>
+            </div>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-primary);">
+              <li style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--purple-light);">✔</span> Rotating Conic Card Borders</li>
+              <li style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--purple-light);">✔</span> Magnetic Target Button Pulls</li>
+              <li style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--purple-light);">✔</span> Shimmering Type & Progress Glows</li>
+              <li style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--purple-light);">✔</span> Hamburger-to-X Menu Morph</li>
+            </ul>
+          </div>
+
+          <!-- Card 3: Teste Skill -->
+          <div class="glass-card skill-card reveal" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div class="skill-icon-wrap" style="width: 48px; height: 48px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; background: rgba(46, 204, 113, 0.15); color: var(--green); margin-bottom: 1.25rem;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.25rem;">Teste Skill</h2>
+              <p style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">Correctness & Verification</p>
+              <p style="font-size: 0.875rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.5rem;">
+                Providing robust testing, automated auditing, and validation procedures to ensure cryptographic security, math accuracy, and compliance alignment.
+              </p>
+            </div>
+            <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.8125rem; color: var(--text-primary);">
+              <li style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--green);">✔</span> Real Web Crypto API Execution</li>
+              <li style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--green);">✔</span> Kyber-1024 XOR Encapsulation</li>
+              <li style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--green);">✔</span> In-Browser PDF Data Export</li>
+              <li style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--green);">✔</span> Multi-Factor Regulatory Scoring</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== REPORT ===== -->
+      <section id="section-report" class="page-section">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Executive Security Report</h1>
+            <p class="page-subtitle">Quantum Readiness Assessment for Acme Corp</p>
+          </div>
+          <div style="display: flex; gap: 0.75rem;">
+            <a href="idea_ppt_template.html" target="_blank" class="btn-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; height: 38px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 17V7l7 5z"/></svg>
+              Idea PPT
+            </a>
+            <a href="attestation_template.html" target="_blank" class="btn-outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; height: 38px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              Attestation PDF
+            </a>
+            <button class="btn-primary" id="download-pdf-btn" onclick="exportPDF()" style="height: 38px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              Export Premium PDF
+            </button>
+          </div>
+        </div>
+
+        <div class="report-container" id="report-container">
+          <div class="glass-card report-header-card">
+            <div class="report-title-block">
+              <div class="report-logo">
+                <!-- Cywayz CXO Brand Logo SVG -->
+                <svg width="60" height="40" viewBox="0 0 60 30" fill="none" style="overflow: visible;">
+                  <path d="M14 7 A 6 6 0 1 0 14 21" stroke="#0066cc" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+                  <path d="M21 21 L29 11 M21 11 L29 21" stroke="#f39c12" stroke-width="4.5" stroke-linecap="round"/>
+                  <path d="M25 8 L32 8 L32 15" stroke="#f39c12" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                  <path d="M29 11 L32 8" stroke="#f39c12" stroke-width="4.5" stroke-linecap="round"/>
+                  <circle cx="43" cy="14" r="5" stroke="#2ecc71" stroke-width="4.5" fill="none"/>
+                </svg>
+              </div>
+              <div>
+                <h2>Quantum Readiness Assessment Report</h2>
+                <p>Organization: <strong>Acme Corp</strong></p>
+                <p>Generated: <strong id="report-date"></strong></p>
+                <p>Tool: <strong>QuantumShield v1.0 — CXO-INNOFEST 2026 (PS 013)</strong></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="report-grid">
+            <div class="glass-card">
+              <h3 class="card-title">Executive Summary</h3>
+              <div id="report-summary"></div>
+            </div>
+            <div class="glass-card">
+              <h3 class="card-title">Risk Score Overview</h3>
+              <canvas id="report-chart" height="200"></canvas>
+            </div>
+          </div>
+
+          <div class="glass-card" style="margin-top:1.5rem">
+            <h3 class="card-title">Inventory Summary</h3>
+            <div class="table-wrap">
+              <table id="report-inventory-table">
+                <thead>
+                  <tr><th>Asset</th><th>Algorithm</th><th>Risk</th><th>Recommended Action</th><th>Timeline</th></tr>
+                </thead>
+                <tbody id="report-inventory-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="glass-card" style="margin-top:1.5rem">
+            <h3 class="card-title">Recommended Migration Actions</h3>
+            <div id="report-actions" class="report-actions-list"></div>
+          </div>
+
+          <div class="glass-card report-disclaimer">
+            <p><strong>NIST References:</strong> FIPS 203 (ML-KEM/Kyber), FIPS 204 (ML-DSA/Dilithium), FIPS 205 (SLH-DSA/SPHINCS+), FIPS 206 (FN-DSA/FALCON) · NIST SP 800-208</p>
+            <p>This report was generated by QuantumShield for CXO-INNOFEST Hackathon 2026 (PS 013). Presented by team at <strong>Cywayz CXO Hackathon</strong>.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+</body>
+</html>
