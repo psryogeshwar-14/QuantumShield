@@ -38,8 +38,6 @@ This project is a static front-end web application requiring no compilation step
 ```
 ├── index.html              # Main HTML5 SPA structure and CDN loads
 ├── sitemap.xml             # Search engine sitemap for logical section indexing
-├── idea_ppt_template.html  # Responsive HTML 16:9 solution presentation slides
-├── attestation_template.html # Formal Declaration of Originality print layout
 ├── presentation_slides_copy.md # Copy-paste template for Google Slides
 ├── CONTEXT.md              # Technical facts (Shor's, Grover's, NIST FIPS standards)
 ├── COPY.md                 # Text copy, titles, descriptions, and page-level SEO plan

@@ -229,27 +229,5 @@ Each page (section) below is mapped to its own target search queries, unique pag
     *   `Wave 3: Medium-Term (< 12 Months) — 🚨 Upgrade Backend Databases. Transition backend databases and storage networks to AES-256-GCM.`
 *   **Citations:** `NIST References: FIPS 203 (ML-KEM/Kyber), FIPS 204 (ML-DSA/Dilithium), FIPS 205 (SLH-DSA/SPHINCS+), FIPS 206 (FN-DSA/FALCON) · NIST SP 800-208`
 *   **Action Button:** `Export Premium PDF`
-*   **Template Download Action Buttons:**
-    *   *Idea PPT:* `Idea PPT` (links to `idea_ppt_template.html`)
-    *   *Attestation PDF:* `Attestation PDF` (links to `attestation_template.html`)
 
----
-
-## 10. Deliverable Templates (Team: HackXO)
-
-### A. Slide Deck (idea_ppt_template.html)
-*   **Purpose:** HTML-based pitch deck to outline the solution concept for judges.
-*   **Structure:**
-    1.  *Slide 1:* Cover (HackXO Team and QuantumShield)
-    2.  *Slide 2:* Problem Statement (Q-Day & Shor's algorithm threat)
-    3.  *Slide 3:* Toolkit Overview (Audit, Assess, Roadmap)
-    4.  *Slide 4:* Key Features (CSV scanning, NIST FIPS compliance mapping)
-    5.  *Slide 5:* Cryptographic Wrapper (Web Crypto API + Kyber XOR encapsulation)
-    6.  *Slide 6:* Transition Phases (Roadmap timeline schedule)
-    7.  *Slide 7:* Metrics & Impact (Readiness dial score improvements)
-    8.  *Slide 8:* Summary (Call to action for evaluations)
-
-### B. Declaration of Originality (attestation_template.html)
-*   **Purpose:** Formal signed attestation of originality.
-*   **Key Text:** `We, the members of Team HackXO, hereby declare and certify that the code, design, features, and assets submitted for the CXO-INNOFEST 2026 under Problem Statement PS 013 representing the product QuantumShield are our own original creations.`
 
