@@ -11,3 +11,7 @@
 .env
 *.env
 .env.*
+
+# Local reference PDF documentation
+QuantumShield_Project_Documentation.pdf
+
