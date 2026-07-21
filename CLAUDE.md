@@ -17,6 +17,20 @@ This project is a static front-end web application requiring no compilation step
     open -a "Safari" "index.html"
     ```
 
+### GitHub Synchronization
+*   **Link Remote & Push to GitHub:**
+    ```bash
+    git remote add origin <YOUR_GITHUB_REPO_URL>
+    git branch -M main
+    git push -u origin main
+    ```
+*   **Subsequent commits:**
+    ```bash
+    git add .
+    git commit -m "commit message"
+    git push
+    ```
+
 ---
 
 ## 2. Project Architecture & File Structure
@@ -26,6 +40,7 @@ This project is a static front-end web application requiring no compilation step
 ├── sitemap.xml             # Search engine sitemap for logical section indexing
 ├── idea_ppt_template.html  # Responsive HTML 16:9 solution presentation slides
 ├── attestation_template.html # Formal Declaration of Originality print layout
+├── presentation_slides_copy.md # Copy-paste template for Google Slides
 ├── CONTEXT.md              # Technical facts (Shor's, Grover's, NIST FIPS standards)
 ├── COPY.md                 # Text copy, titles, descriptions, and page-level SEO plan
 ├── DESIGN.md               # Visual token manifest (Cywayz Brand colors, spacing, CSS beziers)
