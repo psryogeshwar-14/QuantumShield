@@ -39,6 +39,7 @@ This project is a static front-end web application requiring no compilation step
 ├── index.html              # Main HTML5 SPA structure and CDN loads
 ├── sitemap.xml             # Search engine sitemap for logical section indexing
 ├── presentation_slides_copy.md # Copy-paste template for Google Slides
+├── secureshield_ai_pitch_kit.md # Pitch script & live demo guides for SecureShield AI
 ├── CONTEXT.md              # Technical facts (Shor's, Grover's, NIST FIPS standards)
 ├── COPY.md                 # Text copy, titles, descriptions, and page-level SEO plan with Dev Sandbox details
 ├── DESIGN.md               # Visual token manifest (Cywayz Brand colors, spacing, CSS beziers)
