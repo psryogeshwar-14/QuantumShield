@@ -113,6 +113,10 @@
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
           Hybrid Crypto Demo
         </a>
+        <a class="nav-item" data-section="sandbox" onclick="navigate('sandbox')">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          PQC Dev Sandbox
+        </a>
         <a class="nav-item" data-section="skills" onclick="navigate('skills')">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
           Specialist Skills
@@ -783,6 +787,61 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== PQC DEV SANDBOX ===== -->
+      <section id="section-sandbox" class="page-section">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">PQC Developer Sandbox</h1>
+            <p class="page-subtitle">Agentic Compilation & WebAssembly Sandbox Simulation</p>
+          </div>
+          <div style="display: flex; gap: 0.75rem;">
+            <button class="btn-outline" onclick="sandboxResetCode()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+              Reset Code
+            </button>
+            <button class="btn-primary" onclick="sandboxCompileCode()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Compile &amp; Run Agent Loop
+            </button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; height: calc(100vh - 220px); min-height: 500px;">
+          <!-- Left Panel: Code Editor -->
+          <div class="glass-card" style="display: flex; flex-direction: column; padding: 1.5rem; height: 100%; box-sizing: border-box;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--cyan); font-weight: 700;">📂 Virtual File: main.js</span>
+              <button class="btn-outline" onclick="sandboxTriggerError()" style="font-size: 0.75rem; padding: 0.25rem 0.5rem; height: auto;">⚠️ Inject Key Wrap Error</button>
+            </div>
+            <textarea id="sandbox-code-editor" style="flex: 1; width: 100%; background: rgba(5, 10, 20, 0.5); color: #c3dae9; font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.5; border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-sm); padding: 1rem; resize: none; outline: none; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);"></textarea>
+          </div>
+
+          <!-- Right Panel: Outputs -->
+          <div style="display: grid; grid-template-rows: 1.2fr 1fr; gap: 1.5rem; height: 100%;">
+            <!-- Top Right: Execution Terminal Console -->
+            <div class="glass-card" style="display: flex; flex-direction: column; padding: 1.5rem; box-sizing: border-box; background: #020617; border-color: rgba(255,255,255,0.05);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--purple-light); font-weight: 700;">🖥️ Agent &amp; VFS Terminal</span>
+                <span id="sandbox-agent-status" class="status-badge" style="background: rgba(255,255,255,0.05); color: var(--text-muted);">Idle</span>
+              </div>
+              <div id="sandbox-console-output" style="flex: 1; width: 100%; background: #090d16; color: #4ade80; font-family: 'JetBrains Mono', monospace; font-size: 0.8125rem; line-height: 1.6; border-radius: var(--radius-sm); padding: 1rem; overflow-y: auto; white-space: pre-wrap; box-shadow: inset 0 0 10px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.05);">Welcome to QuantumShield Dev sandbox. Press "Compile & Run Agent Loop" to execute compilation.</div>
+            </div>
+
+            <!-- Bottom Right: Live Web Preview Server Frame -->
+            <div class="glass-card" style="display: flex; flex-direction: column; padding: 1.5rem; box-sizing: border-box; background: rgba(5, 10, 20, 0.45);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--green); font-weight: 700;">🌐 Preview Server Output</span>
+                <span id="sandbox-preview-address" style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">http://localhost:5173</span>
+              </div>
+              <div id="sandbox-preview-frame" style="flex: 1; width: 100%; background: rgba(2, 6, 23, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--radius-sm); padding: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--text-secondary); gap: 0.75rem; box-shadow: 0 0 20px rgba(0,0,0,0.3);">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <p style="font-size: 0.875rem;">Compile code to launch WebAssembly preview frame</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

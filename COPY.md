@@ -208,6 +208,26 @@ Each page (section) below is mapped to its own target search queries, unique pag
 
 ---
 
+## 8. Page 7: PQC Developer Sandbox
+
+### SEO & Metadata Plan
+*   **Target Page Title:** `PQC Developer Sandbox | QuantumShield`
+*   **Target Meta Description:** `Simulate an agentic post-quantum compiler. Edit, compile, and run client-side hybrid cryptosystems in a secure browser sandbox.`
+*   **Target Queries:** `pqc code compilation sandbox`, `hybrid cryptography compiler simulator`, `agentic self-correcting compiler playground`
+*   **On-Page SEO Structure:**
+    *   `H1`: `PQC Developer Sandbox`
+    *   `H2`/`H3` Keywords: `VFS Terminal`, `Preview Server Output`, `WASM Container Sandbox`
+
+### Section Copy
+*   **Sidebar Navigation Label:** `PQC Dev Sandbox`
+*   **Page Title:** `PQC Developer Sandbox`
+*   **Page Subtitle:** `Agentic Compilation & WebAssembly Sandbox Simulation`
+*   **Action Button 1:** `Reset Code`
+*   **Action Button 2:** `Compile & Run Agent Loop`
+*   **Error Button:** `Inject Key Wrap Error`
+
+---
+
 ## 9. Page 8: Executive Security Report
 
 ### SEO & Metadata Plan

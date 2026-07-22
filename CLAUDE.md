@@ -40,7 +40,7 @@ This project is a static front-end web application requiring no compilation step
 ├── sitemap.xml             # Search engine sitemap for logical section indexing
 ├── presentation_slides_copy.md # Copy-paste template for Google Slides
 ├── CONTEXT.md              # Technical facts (Shor's, Grover's, NIST FIPS standards)
-├── COPY.md                 # Text copy, titles, descriptions, and page-level SEO plan
+├── COPY.md                 # Text copy, titles, descriptions, and page-level SEO plan with Dev Sandbox details
 ├── DESIGN.md               # Visual token manifest (Cywayz Brand colors, spacing, CSS beziers)
 ├── CLAUDE.md               # Developer guidelines and commands
 ├── css/

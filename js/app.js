@@ -1350,12 +1350,221 @@ function toggleMobileSidebar() {
 }
 
 // ============================================================
+// PQC DEVELOPER SANDBOX SIMULATOR
+// ============================================================
+const SANDBOX_DEFAULT_CODE = `// QuantumShield PQC Hybrid Wrap
+import { webcrypto } from "crypto";
+import { kyber1024 } from "./js/crypto-demo.js";
+
+async function encryptPayload(plaintext) {
+  // 1. Generate Classical AES Key
+  const aesKey = await webcrypto.subtle.generateKey(
+    { name: "AES-GCM", length: 256 },
+    true,
+    ["encrypt", "decrypt"]
+  );
+  
+  // 2. Encrypt payload using AES key
+  const iv = webcrypto.getRandomValues(new Uint8Array(12));
+  const ciphertext = await webcrypto.subtle.encrypt(
+    { name: "AES-GCM", iv: iv },
+    aesKey,
+    new TextEncoder().encode(plaintext)
+  );
+
+  // 3. Perform Post-Quantum Kyber wrapping
+  // Kyber-1024 provides 256-bit PQC strength
+  const pqWrap = await kyber1024.encrypt(aesKey);
+  
+  return {
+    ciphertext: btoa(String.fromCharCode(...new Uint8Array(ciphertext))),
+    classicWrap: "RSA-OAEP-2048-SUCCESS",
+    quantumWrap: pqWrap.ciphertext,
+    version: "2.1.0-pqc"
+  };
+}`;
+
+const SANDBOX_ERROR_CODE = `// QuantumShield PQC Hybrid Wrap
+import { webcrypto } from "crypto";
+
+async function encryptPayload(plaintext) {
+  // 1. Generate Classical AES Key
+  const aesKey = await webcrypto.subtle.generateKey(
+    { name: "AES-GCM", length: 256 },
+    true,
+    ["encrypt", "decrypt"]
+  );
+  
+  // 2. Encrypt payload using AES key
+  const iv = webcrypto.getRandomValues(new Uint8Array(12));
+  const ciphertext = await webcrypto.subtle.encrypt(
+    { name: "AES-GCM", iv: iv },
+    aesKey,
+    new TextEncoder().encode(plaintext)
+  );
+
+  // 3. Perform Post-Quantum Kyber wrapping
+  // ERROR: Missing kyber1024 import and calling undefined!
+  const pqWrap = await kyber1024.encrypt(aesKey);
+  
+  return {
+    ciphertext: btoa(String.fromCharCode(...new Uint8Array(ciphertext))),
+    classicWrap: "RSA-OAEP-2048-SUCCESS",
+    quantumWrap: pqWrap.ciphertext,
+    version: "2.1.0-pqc"
+  };
+}`;
+
+function initSandbox() {
+  const editor = document.getElementById('sandbox-code-editor');
+  if (editor && !editor.value) {
+    editor.value = SANDBOX_DEFAULT_CODE;
+  }
+}
+
+function sandboxResetCode() {
+  const editor = document.getElementById('sandbox-code-editor');
+  if (editor) {
+    editor.value = SANDBOX_DEFAULT_CODE;
+    showConsoleMsg('Sandbox code reset to default configuration.');
+  }
+}
+
+function sandboxTriggerError() {
+  const editor = document.getElementById('sandbox-code-editor');
+  if (editor) {
+    editor.value = SANDBOX_ERROR_CODE;
+    showConsoleMsg('Key Wrap Error code injected. Ready to compile.');
+  }
+}
+
+function showConsoleMsg(msg) {
+  const consoleOut = document.getElementById('sandbox-console-output');
+  if (consoleOut) {
+    consoleOut.innerHTML = msg;
+    consoleOut.scrollTop = consoleOut.scrollHeight;
+  }
+}
+
+function sandboxCompileCode() {
+  const editor = document.getElementById('sandbox-code-editor');
+  const statusBadge = document.getElementById('sandbox-agent-status');
+  const previewFrame = document.getElementById('sandbox-preview-frame');
+  const code = editor.value;
+
+  if (!editor || !statusBadge || !previewFrame) return;
+
+  statusBadge.innerHTML = 'Compiling...';
+  statusBadge.style.color = '#f39c12';
+  
+  let logOutput = '[VFS] Saving file changes...\n';
+  showConsoleMsg(logOutput);
+
+  // Simulate step-by-step agent loop logs
+  setTimeout(() => {
+    logOutput += '[VFS] Writing main.js...\n';
+    showConsoleMsg(logOutput);
+  }, 600);
+
+  setTimeout(() => {
+    logOutput += '[Bundler] Running compiler task (npm run build)...\n';
+    showConsoleMsg(logOutput);
+  }, 1200);
+
+  // Determine if code has error
+  const hasError = !code.includes('import { kyber1024 }');
+
+  if (hasError) {
+    setTimeout(() => {
+      logOutput += '<span style="color: #ef4444;">[Bundler] ReferenceError: kyber1024 is not defined at encryptPayload (main.js:19)</span>\n';
+      logOutput += '[Agent] Compiler task failed! Initializing self-correction loop...\n';
+      statusBadge.innerHTML = 'Self-Correcting';
+      statusBadge.style.color = '#9b59b6';
+      showConsoleMsg(logOutput);
+    }, 2000);
+
+    setTimeout(() => {
+      logOutput += '[Agent] Reasoning: Variable "kyber1024" is used on line 19 but has not been defined or imported.\n';
+      logOutput += '[Agent] Applying code diff to main.js:\n';
+      logOutput += '<span style="color: #4ade80;">+ import { kyber1024 } from "./js/crypto-demo.js";</span>\n';
+      showConsoleMsg(logOutput);
+      
+      // Auto-correct the code in the editor visual block
+      editor.value = SANDBOX_DEFAULT_CODE;
+    }, 3200);
+
+    setTimeout(() => {
+      logOutput += '[VFS] Applying diff & saving changes...\n';
+      logOutput += '[Bundler] Re-compiling main.js...\n';
+      showConsoleMsg(logOutput);
+    }, 4400);
+
+    setTimeout(() => {
+      logOutput += '[Bundler] Build succeeded! Generated dist/main.bundle.js\n';
+      logOutput += '[Deploy] Transferring files to live WebAssembly server...\n';
+      showConsoleMsg(logOutput);
+    }, 5200);
+
+    setTimeout(() => {
+      logOutput += '<span style="color: #4ade80;">[Deploy] Preview updated at http://localhost:5173/</span>\n';
+      showConsoleMsg(logOutput);
+      
+      statusBadge.innerHTML = 'Success';
+      statusBadge.style.color = '#2ecc71';
+      
+      updateSandboxPreview();
+    }, 6000);
+  } else {
+    // Normal compile success
+    setTimeout(() => {
+      logOutput += '[Bundler] Build succeeded! Generated dist/main.bundle.js\n';
+      logOutput += '[Deploy] Transferring files to live WebAssembly server...\n';
+      showConsoleMsg(logOutput);
+    }, 2000);
+
+    setTimeout(() => {
+      logOutput += '<span style="color: #4ade80;">[Deploy] Preview updated at http://localhost:5173/</span>\n';
+      showConsoleMsg(logOutput);
+      
+      statusBadge.innerHTML = 'Success';
+      statusBadge.style.color = '#2ecc71';
+      
+      updateSandboxPreview();
+    }, 2800);
+  }
+}
+
+function updateSandboxPreview() {
+  const previewFrame = document.getElementById('sandbox-preview-frame');
+  if (previewFrame) {
+    previewFrame.innerHTML = `
+      <div class="decrypt-success" style="width: 100%; text-align: left; background: rgba(46, 204, 113, 0.08); border: 1px solid rgba(46, 204, 113, 0.2); padding: 1.25rem; border-radius: var(--radius-sm); box-sizing: border-box;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <span style="font-weight: 700; color: var(--green); display: flex; align-items: center; gap: 0.25rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            App Running Successfully
+          </span>
+          <span style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">v2.1.0-pqc</span>
+        </div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: var(--radius-xs); border: 1px solid rgba(255,255,255,0.05); color: #c3dae9; line-height: 1.6;">
+          <strong>Classic Wrapper:</strong> RSA-OAEP-2048-SUCCESS<br>
+          <strong>Quantum Wrapper:</strong> Kyber-1024-Encapsulated-Key-Valid<br>
+          <strong>Symmetric Cipher:</strong> AES-256-GCM<br>
+          <strong>Status:</strong> All communications quantum-safe.
+        </div>
+      </div>
+    `;
+  }
+}
+
+// ============================================================
 // INIT
 // ============================================================
 window.addEventListener('DOMContentLoaded', () => {
   initParticles();
   initMicroAnimations();
   initDashboard();
+  initSandbox();
   navigate('dashboard');
   
   // Dismiss loading overlay with smooth fade
